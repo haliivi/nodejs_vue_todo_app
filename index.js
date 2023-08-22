@@ -1,6 +1,7 @@
 
 require('dotenv').config()
 const path = require('path')
+const sequelize = require('./utils/database')
 const express = require('express')
 const app = express()
 const todoRoutes = require('./routes/todo')
@@ -14,4 +15,13 @@ app.use((req, res, next) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'))
 })
 
-app.listen(PORT)
+async function start () {
+    try {
+        await sequelize.sync()
+        app.listen(PORT)
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+start()
